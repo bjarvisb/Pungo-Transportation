@@ -121,6 +121,17 @@ td.win{color:var(--good);font-weight:700}
 .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
 .fields label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted)}
 input[type=number],input[type=time]{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px}
+.facts{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.facts.two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.fact{background:var(--bg);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.fact h3{font-size:16px}
+.fact dl{margin:4px 0 0;display:grid;grid-template-columns:1fr auto;column-gap:16px;row-gap:9px;font-variant-numeric:tabular-nums}
+.fact dt{color:var(--text);font-size:15px;line-height:1.3}
+.fact dd{margin:0;font-weight:700;color:var(--ink);font-size:15px;text-align:right;white-space:nowrap}
+.fact dd.win{color:var(--good)} .fact dd.soft{color:var(--muted);font-weight:400}
+.fact dt small{display:block;color:var(--muted);font-size:13px}
+.plain.tight li{font-size:15px;margin-bottom:6px}
+details.sub{background:var(--surface)} details.sub>summary{font-size:15px;padding:10px 14px}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .more{display:flex;flex-direction:column;gap:22px}
 .more.hold{visibility:hidden}
@@ -154,36 +165,40 @@ input[type=number],input[type=time]{width:100%;font:inherit;color:var(--ink);bac
   </div>
 
   <details>
-    <summary>Comparison, other options tested, assumptions</summary>
+    <summary>Backup: the numbers, options tested, open items</summary>
     <div class="body">
-      <h3>Route 8 today vs. the van</h3>
-      <div class="scroll"><table id="compare"></table></div>
-      <p class="note" id="tradeoff"></p>
-      <h3>Other stop layouts tested</h3>
-      <div class="scroll"><table id="layouts"></table></div>
-      <h3>Where Central-West families would meet</h3>
-      <div class="scroll"><table id="nbtable"></table></div>
-      <p class="note" id="nbnote"></p>
-      <h3>Not answered yet</h3>
-      <ul class="plain">
-        <li>10 students ride from Home Depot today: 3 from 23456 and 7 from other zips. The business office should confirm how many ride in the morning.</li>
-        <li>The family survey will show how many of the nearby students would actually ride.</li>
-        <li>Salem Crossing parking needs the owner's permission, and families driving to that stop should be reviewed by our insurance carrier.</li>
-        <li>The 5:40 run is an estimate and changes by season. It assumes two riders at Home Depot.</li>
-        <li>Morning traffic on I-64 between Indian River Road and school is the biggest unknown in the van's time. A test drive at 7:15 would confirm it.</li>
-        <li>Homes are shown rounded to about a quarter mile.</li>
-      </ul>
-      <h3>Assumptions you can change</h3>
-      <div class="fields">
-        <label>Arrive at school<input type="time" id="in-arrive" data-k="arrive"></label>
-        <label>Afternoon run departs<input type="time" id="in-pm" data-k="pmDepart"></label>
-        <label>Late bus departs<input type="time" id="in-late" data-k="lateDepart"></label>
-        <label>Minutes per stop<input type="number" id="in-dwell" data-k="dwell" min="0" step="0.5"></label>
-        <label>Traffic factor, morning<input type="number" id="in-mam" data-k="mult.am" min="1" max="2.5" step="0.01"></label>
-        <label>Traffic factor, afternoon<input type="number" id="in-mpm" data-k="mult.pm" min="1" max="2.5" step="0.01"></label>
-        <label>Traffic factor, 5:40<input type="number" id="in-mlate" data-k="mult.late" min="1" max="2.5" step="0.01"></label>
+      <div class="facts">
+        <div class="fact"><h3>Ride time from Home Depot</h3><dl id="f-ride"></dl></div>
+        <div class="fact"><h3>Door to school, morning</h3><p class="note">Average for families in the Home Depot area</p><dl id="f-door"></dl></div>
+        <div class="fact"><h3>A parent's driving per day</h3><p class="note">One parent doing drop-off and pickup</p><dl id="f-parent"></dl></div>
       </div>
-      <p class="note">Route 8 times come from its schedule: Home Depot pickup 6:52 AM, school arrival 8:00 AM, and the afternoon run, which leaves about 3:20 and reaches Home Depot at 4:24. Its path on the map is drawn over roads between its stops in pickup order; road data puts that trip at about 50 minutes before traffic, which matches its scheduled 68 minutes with the same traffic factor. Van times use the same road data and traffic factors, plus three minutes at each stop. The Route 8 saving assumes its bus starts and ends at school and that General Booth and S. Birdneck becomes its first morning stop.</p>
+      <div class="facts two">
+        <div class="fact"><h3>Options tested</h3><dl id="f-opts"></dl></div>
+        <div class="fact"><h3>Not answered yet</h3>
+          <ul class="plain tight">
+            <li>Business office: how many of the 10 Home Depot riders ride in the morning (3 from 23456, 7 from other zips).</li>
+            <li>Business office: confirm none of our 23456 students ride Route 15.</li>
+            <li>Family survey: how many would actually ride.</li>
+            <li>Transquest: driver cost and terms, and who supervises younger riders.</li>
+            <li>A 7:15 AM test drive. I-64 from Indian River Road is the biggest unknown in the van's time.</li>
+            <li>The 5:40 run is an estimate and changes by season.</li>
+          </ul></div>
+      </div>
+      <details class="sub">
+        <summary>Assumptions and method</summary>
+        <div class="body">
+          <div class="fields">
+            <label>Arrive at school<input type="time" id="in-arrive" data-k="arrive"></label>
+            <label>Afternoon run departs<input type="time" id="in-pm" data-k="pmDepart"></label>
+            <label>Late bus departs<input type="time" id="in-late" data-k="lateDepart"></label>
+            <label>Minutes per stop<input type="number" id="in-dwell" data-k="dwell" min="0" step="0.5"></label>
+            <label>Traffic factor, morning<input type="number" id="in-mam" data-k="mult.am" min="1" max="2.5" step="0.01"></label>
+            <label>Traffic factor, afternoon<input type="number" id="in-mpm" data-k="mult.pm" min="1" max="2.5" step="0.01"></label>
+            <label>Traffic factor, 5:40<input type="number" id="in-mlate" data-k="mult.late" min="1" max="2.5" step="0.01"></label>
+          </div>
+          <p class="note">Route 8 times come from its schedule: Home Depot pickup 6:52 AM, school arrival 8:00 AM, and the afternoon run, which leaves about 3:20 and reaches Home Depot at 4:24. Van times use road data with traffic factors set so the same method reproduces Route 8's scheduled times, plus three minutes at the stop. Door-to-school times add the drive to Home Depot and five minutes at the stop. Homes are shown rounded to about a quarter mile. The Route 8 saving assumes its bus starts and ends at school and that General Booth and S. Birdneck becomes its first morning stop.</p>
+        </div>
+      </details>
     </div>
   </details>
 </div>
@@ -203,8 +218,9 @@ const R8_STOPS = [
   ['Harbour Point & Fishermans Bend',36.8286,-75.9761,'7:06 AM / 4:09 PM'],['S. Atlantic & Twilight',36.8243,-75.9696,'4:13 PM'],['General Booth & S. Birdneck',36.8106,-75.9898,'4:18 PM']
 ];
 const PTS = {school:[36.875416,-76.190423], HD:[36.758301,-76.011183], CW:[36.7320,-76.0928], W:[36.7922,-76.1219]};
-/* Proposed plan: one van, two stops. Central-West and Salem families meet at Salem Crossing. */
-const PLAN_SET = ['HD','W'], MEET = {HD:'HD',CW:'W',W:'W'};
+/* Proposed plan: one van, Home Depot direct. Salem Crossing and Bridge Church are kept only as tested options. */
+const PLAN_SET = ['HD'], MEET = {HD:'HD',CW:'HD',W:'HD'};
+const WAIT = 5; /* minutes a family allows at the stop before pickup */
 const S = { step:1, sub:1, fresh:false, run:'am', arrive:'08:00', pmDepart:'15:20', lateDepart:'17:40', dwell:3,
   mult:{am:+(14/D.calib.am_ff).toFixed(2), pm:+(24/D.calib.pm_ff).toFixed(2), late:1.15} };
 const $ = id => document.getElementById(id);
@@ -324,7 +340,7 @@ function zoomBy(f, cx, cy){
 }
 
 function fitHome(){
-  const pts = [PTS.school, PTS.HD, PTS.W, ...D.dots.map(d=>[d.lat,d.lon]), ...D.r8line.filter((_,i)=>i%6===0)].map(p=>proj(p[0],p[1]));
+  const pts = [PTS.school, PTS.HD, ...D.dots.map(d=>[d.lat,d.lon]), ...D.r8line.filter((_,i)=>i%6===0)].map(p=>proj(p[0],p[1]));
   let x0=Math.min(...pts.map(p=>p[0])), x1=Math.max(...pts.map(p=>p[0])), y0=Math.min(...pts.map(p=>p[1])), y1=Math.max(...pts.map(p=>p[1]));
   const padx=(x1-x0)*0.07, pady=(y1-y0)*0.07; x0-=padx; x1+=padx; y0-=pady; y1+=pady;
   let w=x1-x0, h=y1-y0; if(h/w>MAP.asp){ const nw=h/MAP.asp; x0-=(nw-w)/2; w=nw; } else { const nh=w*MAP.asp; y0-=(nh-h)/2; h=nh; }
@@ -362,7 +378,7 @@ function drawMap(){
     g += `<circle cx="${x}" cy="${y}" r="${r}" fill="#259FAE" stroke="#fff" stroke-width="${2*u}"><title>${d.n} student${d.n>1?'s':''}, location rounded</title></circle>`;
     if(d.n>1) g += `<text x="${x}" y="${y+4.4*u}" text-anchor="middle" font-size="${12*u}" font-weight="700" fill="#fff">${d.n}</text>`;
   });
-  const stopsToDraw = st>=2 ? (st===3 ? ['HD','W'] : ['HD']) : [];
+  const stopsToDraw = st>=2 ? ['HD'] : [];
   stopsToDraw.forEach(k=>{
     const [x,y] = proj(...PTS[k]), L = label[k];
     g += `<circle cx="${x}" cy="${y}" r="${14*u}" fill="${L?'#172E69':'#fff'}" stroke="${L?'#fff':'#B8470F'}" stroke-width="${2.4*u}"/>`;
@@ -403,24 +419,24 @@ function panelHTML(M, hdA, hdP, wA, wP){
     <div class="grp"><div class="glabel">Our students</div>
       <div class="nums three">
         <div class="num"><b>${M.tot}</b><span>enrolled from 23456</span></div>
-        <div class="num"><b>${en}</b><span>live near Home Depot</span></div>
+        <div class="num"><b>${D.hh.length}</b><span>families</span></div>
         <div class="num low"><b>3</b><span>ride the bus</span></div>
       </div></div>
     <div class="more ${staged()&&S.sub<2?'hold':''} ${S.fresh?'fresh':''}">
     <div class="grp"><div class="glabel">Getting to school</div>
       <div class="nums two">
-        <div class="num"><b>${eastDrive} <small>min</small></b><span>average morning drive for those ${en}</span></div>
+        <div class="num"><b>${eastDrive} <small>min</small></b><span>average morning drive from the Home Depot area</span></div>
         <div class="num hot"><b>${R8_RIDE_AM} <small>min</small></b><span>Bus Route 8 ride time, morning; ${R8_RIDE_PM} home</span></div>
       </div></div>
     <div><h3>What we think gets in the way</h3>
-    <ul class="plain" style="margin-top:8px"><li>Distance. Pungo families drive about ${eastDrive} minutes each way.</li><li>A bus ride that takes longer than driving, so there is little reason to choose it.</li><li>Awareness. We are still building our name here.</li></ul></div></div>${nav}`;
+    <ul class="plain" style="margin-top:8px"><li>Distance. Pungo families drive about ${eastDrive} minutes each way.</li><li>A bus ride of more than an hour, so for most working families it is not a real option.</li><li>Awareness. We are still building our name here.</li></ul></div></div>${nav}`;
   return `<div class="eyebrow">The proposal</div>
     <div>
       <div class="call"><i>1</i><div><strong>More visibility.</strong><span>A branded van, three runs a day.</span></div></div>
       <div class="call"><i>2</i><div><strong>Shorter rides, more riders.</strong><span>Near Home Depot: <span class="good">${Math.round(hdA.ride)}</span> minutes in the morning instead of ${R8_RIDE_AM}, <span class="good">${Math.round(hdP.ride)}</span> home instead of ${R8_RIDE_PM}.</span></div></div>
-      <div class="call"><i>3</i><div><strong>Reaches more current families.</strong><span>Adding a Salem Crossing stop: ${nW} students within minutes, ${nCW} more within about ${cwFar}. New riders help cover the van.</span></div></div>
+      <div class="call"><i>3</i><div><strong>A path to Norfolk Academy.</strong><span>Families south of Home Depot can start in Lower School without putting a six-year-old on an hour-long bus ride.</span></div></div>
     </div>
-    <div class="ask"><b>Explore:</b> one semester with the 14-seat van, starting with a family survey.
+    <div class="ask"><b>Explore:</b> one semester with the 14-seat van, Home Depot direct, starting with a family survey.
       <div class="askcost">Cost: a dedicated Transquest driver and use of our van, partly offset by Route 8 savings and new rider fees. Figures and terms to come, pending Transquest.</div></div>${nav}`;
 }
 
@@ -441,25 +457,24 @@ function render(){
   if(S.step===3) lg.push(`<span><i class="sw" style="border-color:#172E69"></i>Proposed van route</span>`);
   $('legend').innerHTML = lg.join('');
 
-  // back pocket
-  const row = (label, a, bb, dd) => `<tr><td>${label}</td><td>${a}</td><td class="win">${bb}</td><td>${dd}</td></tr>`;
-  $('compare').innerHTML = `<thead><tr><th></th><th>Route 8 today</th><th>Van</th><th>Difference</th></tr></thead><tbody>
-    ${row('Morning ride, Home Depot',`${R8_RIDE_AM} min`,min1(hdA.ride),`${Math.round(R8_RIDE_AM-hdA.ride)} min shorter`)}
-    ${row('Afternoon ride, Home Depot',`${R8_RIDE_PM} min`,min1(hdP.ride),`${Math.round(R8_RIDE_PM-hdP.ride)} min shorter`)}
-    ${row('Salem and Central-West families','No stop nearby',`${Math.round(wA.ride)} min morning, ${Math.round(wP.ride)} min afternoon`,'New service')}
-    ${row('Effect on Route 8','No change','About 20 minutes less driving a day','Bus and driver time; pickup times for its riders stay the same')}
-  </tbody>`;
-  const hdOnly = layout(['HD'],1,{HD:'HD',CW:'HD',W:'HD'}).am.max;
-  $('tradeoff').textContent = `Including Salem Crossing adds about ${Math.round(hdA.ride-hdOnly)} minutes to the morning Home Depot ride compared with a Home Depot-only van (${Math.round(hdOnly)} minutes), and it adds a stop for ${M.tot-M.Zs.HD.students} Salem and Central-West students.`;
-// behind the numbers
-  const cf = [['Home Depot only, one van',['HD'],1,{HD:'HD',CW:'HD',W:'HD'}],['Home Depot + Salem Crossing, one van',['HD','W'],1,{HD:'HD',CW:'W',W:'W'},true],['Home Depot + Salem Crossing, two vans',['HD','W'],2,{HD:'HD',CW:'W',W:'W'}],['Add a Bridge Church stop, one van',['HD','CW','W'],1,{HD:'HD',CW:'CW',W:'W'}],['Add a Bridge Church stop, two vans',['HD','CW','W'],2,{HD:'HD',CW:'CW',W:'W'}]];
-  $('layouts').innerHTML = `<thead><tr><th>Layout</th><th class="num">Morning, longest ride</th><th class="num">Afternoon, longest ride</th><th class="num">Farthest family drive</th></tr></thead><tbody>${cf.map(c=>{ const l = layout(c[1],c[2],c[3]); return `<tr class="${c[4]?'sel':''}"><td><b>${c[0]}</b>${c[4]?' <span class="pill good">proposed</span>':''}<div class="note">${l.am.plans.map((p,j)=>(l.am.nv>1?'Van '+VAN[j]+': ':'')+p.best.order.map(k=>SHORT[k]).join(' then ')).join('; ')}</div></td><td class="num">${min1(l.am.max)}</td><td class="num">${min1(l.pm.max)}</td><td class="num">${min1(l.far)}</td></tr>`; }).join('')}</tbody>`;
-  const nc = nbCompare('CW',1), best = nc.out.reduce((a,x)=>x.door<a.door?x:a, nc.out[0]), nmm = o => ({HD:'Home Depot',W:'Salem Crossing',CW:'Bridge Church'}[o]);
-  $('nbtable').innerHTML = `<thead><tr><th>Central-West, ${nc.n} students, morning</th><th class="num">Drive to stop</th><th class="num">Van ride</th><th class="num">Door to school</th><th class="num">Parent round trip</th></tr></thead><tbody>
-    <tr><td><b>Parent drives to school</b></td><td class="num">${Math.round(nc.self)} min</td><td class="num">none</td><td class="num">${Math.round(nc.self)} min</td><td class="num">${Math.round(2*nc.self)} min</td></tr>
-    ${nc.out.map(o=>`<tr class="${o.x===best.x?'sel':''}"><td><b>Meet at ${nmm(o.x)}</b>${o.x===best.x?' <span class="pill good">shortest door to school</span>':''}</td><td class="num">${Math.round(o.drive)} min</td><td class="num">${Math.round(o.ride)} min</td><td class="num">${Math.round(o.door)} min</td><td class="num">${Math.round(o.trip)} min</td></tr>`).join('')}</tbody>`;
-  $('nbnote').textContent = 'Door to school is the drive to the stop plus the van ride. Driving to school yourself is often faster door to door; the van saves the parent a long round trip and keeps the student off the road for most of the commute.';
-
+  // backup facts
+  const hdH = D.hh.filter(h=>h.z==='HD'), hn = hdH.reduce((x,h)=>x+h.s,0), am = S.mult.am, pmF = S.mult.pm;
+  const avgD = k => hdH.reduce((x,h)=>x+h.d[k]*h.s,0)/hn;
+  const toStop = avgD('HD')*am, drive = avgD('school')*am;
+  const doorVan = toStop+WAIT+hdA.ride, doorR8 = toStop+WAIT+R8_RIDE_AM;
+  const parNow = 2*avgD('school')*(am+pmF), parVan = 2*avgD('HD')*(am+pmF);
+  const hm = m => { m = Math.round(m/5)*5; const h = Math.floor(m/60), r = m%60; return h ? `about ${h} hr${r?' '+r+' min':''}` : `about ${m} min`; };
+  const dl = rs => rs.map(r=>`<dt>${r[0]}${r[2]?`<small>${r[2]}</small>`:''}</dt><dd class="${r[3]||''}">${r[1]}</dd>`).join('');
+  $('f-ride').innerHTML = dl([['Route 8, morning',`${R8_RIDE_AM} min`],['Van, morning',min1(hdA.ride),'','win'],['Route 8, afternoon',`${R8_RIDE_PM} min`],['Van, afternoon',min1(hdP.ride),'','win'],['Route 8 bus, no Home Depot leg','20 min less a day','its riders keep their times','soft']]);
+  $('f-door').innerHTML = dl([['Parent drives',min1(drive)],['Van',min1(doorVan),'drive to Home Depot, wait, ride','win'],['Route 8 today',min1(doorR8),'drive to Home Depot, wait, ride']]);
+  $('f-parent').innerHTML = dl([['Driving to school',hm(parNow)],['With the van',hm(parVan),'two trips to Home Depot and back','win']]);
+  const two = layout(['HD','W'],1,{HD:'HD',CW:'W',W:'W'}), tHD = two.am.flat.find(x=>x.k==='HD'), tHDp = two.pm.flat.find(x=>x.k==='HD');
+  const three = layout(['HD','CW','W'],1,{HD:'HD',CW:'CW',W:'W'}), cHD = three.am.flat.find(x=>x.k==='HD');
+  $('f-opts').innerHTML = dl([
+    ['Home Depot direct','proposed','','win'],
+    ['Add Salem Crossing',`+${Math.round(tHD.ride-hdA.ride)} AM, +${Math.round(tHDp.ride-hdP.ride)} PM`,`Route 15 already stops about a mile away; our Salem families do not ride it`],
+    ['Add Bridge Church and Salem',`+${Math.round(cHD.ride-hdA.ride)} min AM`,`Puts the Home Depot ride at ${Math.round(cHD.ride)} min, close to Route 8`],
+    ['Two vans','not needed yet','14 seats covers today\'s 10 riders','soft']]);
 }
 let _first = true;
 function nxt(){ if(S.step===2 && S.sub<2 && staged()){ S.sub=2; S.fresh=true; render(); S.fresh=false; const f=$('next'); if(f) f.focus({preventScroll:true}); } else go(S.step+1); }
