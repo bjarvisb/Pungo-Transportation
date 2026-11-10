@@ -53,6 +53,22 @@ header h1{text-align:left;font-size:48px;line-height:1.02}
 .stat b small{font-size:15px;color:var(--muted);font-weight:400}
 .stat span{font-size:16px}
 .stat.hot b{color:var(--orange-ink)}
+.grp{display:flex;flex-direction:column;gap:8px}
+.glabel{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.nums{display:grid;gap:12px}
+.nums.three{grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
+.nums.two{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.num{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:8px;background:var(--bg)}
+.num b{font-size:42px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.num b small{font-size:16px;color:var(--muted);font-weight:400}
+.num span{font-size:15px;line-height:1.25;color:var(--text)}
+.num.low b{color:var(--teal-ink)}
+.num.hot{background:var(--orange-soft)}
+.num.hot b{color:var(--orange-ink)}
+.panel{gap:22px}
+.takeaway{border-left:5px solid var(--orange);padding:4px 0 4px 16px;display:flex;flex-direction:column;gap:6px}
+.takeaway strong{font-size:24px;line-height:1.2;color:var(--ink)}
+.takeaway span{font-size:19px;color:var(--text)}
 ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .call{display:grid;grid-template-columns:38px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
 .call:last-of-type{border-bottom:0}
@@ -147,6 +163,7 @@ input[type=number],input[type=time]{width:100%;font:inherit;color:var(--ink);bac
       <p class="note" id="nbnote"></p>
       <h3>Not answered yet</h3>
       <ul class="plain">
+        <li>10 students ride from Home Depot today: 3 from 23456 and 7 from other zips. The business office should confirm how many ride in the morning.</li>
         <li>The family survey will show how many of the nearby students would actually ride.</li>
         <li>Salem Crossing parking needs the owner's permission, and families driving to that stop should be reviewed by our insurance carrier.</li>
         <li>The 5:40 run is an estimate and changes by season. It assumes two riders at Home Depot.</li>
@@ -377,24 +394,29 @@ function panelHTML(M, hdA, hdP, wA, wP){
     <div class="dots" role="group" aria-label="Steps">${[1,2,3].map(i=>`<button type="button" data-step="${i}" aria-label="Step ${i}" ${i===S.step?'aria-current="step"':''}></button>`).join('')}</div>
     <button class="btn" type="button" id="next" ${S.step===STEPS?'disabled':''}>Next</button></div>`;
   if(S.step===1) return `<div class="eyebrow">The questions</div>
-    <ol class="qs"><li>How present are we in Pungo today?</li><li>What does it take for a family there to get to school?</li><li>What would a dedicated route change, and what would it take to try it?</li></ol>${nav}`;
+    <ol class="qs"><li>How well do Pungo families know us?</li><li>What does it take to get here?</li><li>What would a dedicated route change?</li></ol>${nav}`;
   if(S.step===2) return `<div class="eyebrow">Where we are today</div>
-    <div class="stats">
-      <div class="stat"><b>${M.tot}</b><span>students enrolled from 23456</span></div>
-      <div class="stat"><b>3</b><span>of them ride the bus. Ten students ride from Home Depot in all; the other 7 live outside 23456.</span></div>
-      <div class="stat"><b>${eastDrive} <small>min</small></b><span>average drive for our Pungo families (${en} students), each way, in morning traffic</span></div>
-      <div class="stat hot"><b>${R8_RIDE_AM} <small>min</small></b><span>Route 8 ride in the morning, and ${R8_RIDE_PM} home. Door to door, about ${doorGap} minutes longer than driving.</span></div>
-    </div>
+    <div class="grp"><div class="glabel">Our students</div>
+      <div class="nums three">
+        <div class="num"><b>${M.tot}</b><span>enrolled from 23456</span></div>
+        <div class="num"><b>${en}</b><span>live near Home Depot</span></div>
+        <div class="num low"><b>3</b><span>ride the bus</span></div>
+      </div></div>
+    <div class="grp"><div class="glabel">Getting to school</div>
+      <div class="nums two">
+        <div class="num"><b>${eastDrive} <small>min</small></b><span>average morning drive for those ${en}</span></div>
+        <div class="num hot"><b>${R8_RIDE_AM} <small>min</small></b><span>Bus Route 8 ride time, morning; ${R8_RIDE_PM} home</span></div>
+      </div></div>
     <div><h3>What we think gets in the way</h3>
     <ul class="plain" style="margin-top:8px"><li>Distance. Pungo families drive about ${eastDrive} minutes each way.</li><li>A bus ride that takes longer than driving, so there is little reason to choose it.</li><li>Awareness. We are still building our name here.</li></ul></div>${nav}`;
   return `<div class="eyebrow">The proposal</div>
     <div>
       <div class="call"><i>1</i><div><strong>More visibility.</strong><span>A branded van, three runs a day.</span></div></div>
-      <div class="call"><i>2</i><div><strong>Shorter rides, more riders.</strong><span><span class="good">${Math.round(hdA.ride)}</span> minutes in the morning instead of ${R8_RIDE_AM}, <span class="good">${Math.round(hdP.ride)}</span> home instead of ${R8_RIDE_PM}.</span></div></div>
-      <div class="call"><i>3</i><div><strong>Reaches more current families.</strong><span>Adding a Salem Crossing stop: ${nW} students within minutes, ${nCW} more within about ${cwFar}.</span></div></div>
+      <div class="call"><i>2</i><div><strong>Shorter rides, more riders.</strong><span>Near Home Depot: <span class="good">${Math.round(hdA.ride)}</span> minutes in the morning instead of ${R8_RIDE_AM}, <span class="good">${Math.round(hdP.ride)}</span> home instead of ${R8_RIDE_PM}.</span></div></div>
+      <div class="call"><i>3</i><div><strong>Reaches more current families.</strong><span>Adding a Salem Crossing stop: ${nW} students within minutes, ${nCW} more within about ${cwFar}. New riders help cover the van.</span></div></div>
     </div>
     <div class="ask"><b>Explore:</b> one semester with the 14-seat van, starting with a family survey.
-      <div class="askcost">Cost: a dedicated Transquest driver and use of our van, partly offset by Route 8 savings. Figures and terms to come, pending Transquest.</div></div>${nav}`;
+      <div class="askcost">Cost: a dedicated Transquest driver and use of our van, partly offset by Route 8 savings and new rider fees. Figures and terms to come, pending Transquest.</div></div>${nav}`;
 }
 
 function render(){
