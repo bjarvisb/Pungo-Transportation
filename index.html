@@ -121,10 +121,13 @@ td.win{color:var(--good);font-weight:700}
 .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
 .fields label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted)}
 input[type=number],input[type=time]{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.more{display:flex;flex-direction:column;gap:22px}
+.more.hold{visibility:hidden}
+.more.fresh{animation:rise .4s ease both}
+@media print{.more.hold{visibility:visible!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.more.fresh{animation:none}}
 </style>
-</head>
-<body>
 
 <div class="wrap">
   <header>
@@ -202,7 +205,7 @@ const R8_STOPS = [
 const PTS = {school:[36.875416,-76.190423], HD:[36.758301,-76.011183], CW:[36.7320,-76.0928], W:[36.7922,-76.1219]};
 /* Proposed plan: one van, two stops. Central-West and Salem families meet at Salem Crossing. */
 const PLAN_SET = ['HD','W'], MEET = {HD:'HD',CW:'W',W:'W'};
-const S = { step:1, run:'am', arrive:'08:00', pmDepart:'15:20', lateDepart:'17:40', dwell:3,
+const S = { step:1, sub:1, fresh:false, run:'am', arrive:'08:00', pmDepart:'15:20', lateDepart:'17:40', dwell:3,
   mult:{am:+(14/D.calib.am_ff).toFixed(2), pm:+(24/D.calib.pm_ff).toFixed(2), late:1.15} };
 const $ = id => document.getElementById(id);
 const toMin = s => { const [h,m] = s.split(':').map(Number); return h*60+m; };
@@ -385,6 +388,7 @@ function drawMap(){
 
 /* ---------- the three steps ---------- */
 const STEPS = 3;
+const staged = () => !window.matchMedia('(max-width:560px)').matches;
 function panelHTML(M, hdA, hdP, wA, wP){
   const east = D.hh.filter(h=>h.z==='HD'), en = east.reduce((s,h)=>s+h.s,0);
   const eastDrive = Math.round(east.reduce((s,h)=>s+h.d.school*h.s,0)/en*S.mult.am);
@@ -402,13 +406,14 @@ function panelHTML(M, hdA, hdP, wA, wP){
         <div class="num"><b>${en}</b><span>live near Home Depot</span></div>
         <div class="num low"><b>3</b><span>ride the bus</span></div>
       </div></div>
+    <div class="more ${staged()&&S.sub<2?'hold':''} ${S.fresh?'fresh':''}">
     <div class="grp"><div class="glabel">Getting to school</div>
       <div class="nums two">
         <div class="num"><b>${eastDrive} <small>min</small></b><span>average morning drive for those ${en}</span></div>
         <div class="num hot"><b>${R8_RIDE_AM} <small>min</small></b><span>Bus Route 8 ride time, morning; ${R8_RIDE_PM} home</span></div>
       </div></div>
     <div><h3>What we think gets in the way</h3>
-    <ul class="plain" style="margin-top:8px"><li>Distance. Pungo families drive about ${eastDrive} minutes each way.</li><li>A bus ride that takes longer than driving, so there is little reason to choose it.</li><li>Awareness. We are still building our name here.</li></ul></div>${nav}`;
+    <ul class="plain" style="margin-top:8px"><li>Distance. Pungo families drive about ${eastDrive} minutes each way.</li><li>A bus ride that takes longer than driving, so there is little reason to choose it.</li><li>Awareness. We are still building our name here.</li></ul></div></div>${nav}`;
   return `<div class="eyebrow">The proposal</div>
     <div>
       <div class="call"><i>1</i><div><strong>More visibility.</strong><span>A branded van, three runs a day.</span></div></div>
@@ -423,7 +428,7 @@ function render(){
   const M = model(), hdA = M.am.flat.find(x=>x.k==='HD'), hdP = M.pm.flat.find(x=>x.k==='HD');
   const wA = M.am.flat.find(x=>x.k==='W'), wP = M.pm.flat.find(x=>x.k==='W');
   $('panel').innerHTML = panelHTML(M,hdA,hdP,wA,wP);
-  $('back').onclick = () => go(S.step-1); $('next').onclick = () => go(S.step+1);
+  $('back').onclick = prv; $('next').onclick = nxt;
   document.querySelectorAll('.dots button').forEach(b=>b.onclick=()=>go(+b.dataset.step));
   $('runtabs').hidden = S.step!==3; $('runline').hidden = S.step!==3;
   document.querySelectorAll('#runtabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.run===S.run)));
@@ -457,14 +462,16 @@ function render(){
 
 }
 let _first = true;
-function go(n){ S.step = Math.min(STEPS,Math.max(1,n)); render(); const f = $('next') && !$('next').disabled ? $('next') : $('back'); if(f && !_first) f.focus({preventScroll:true}); }
+function nxt(){ if(S.step===2 && S.sub<2 && staged()){ S.sub=2; S.fresh=true; render(); S.fresh=false; const f=$('next'); if(f) f.focus({preventScroll:true}); } else go(S.step+1); }
+function prv(){ if(S.step===2 && S.sub>1 && staged()){ S.sub=1; render(); const f=$('next'); if(f) f.focus({preventScroll:true}); } else go(S.step-1); }
+function go(n){ const from=S.step; S.step = Math.min(STEPS,Math.max(1,n)); S.sub = S.step===2 ? (n>from?1:2) : S.sub; render(); const f = $('next') && !$('next').disabled ? $('next') : $('back'); if(f && !_first) f.focus({preventScroll:true}); }
 
 document.querySelectorAll('[data-k]').forEach(e=>{ const p=e.dataset.k.split('.'); e.value = p.length===2 ? S[p[0]][p[1]] : S[p[0]];
   e.addEventListener('input',()=>{ const path=e.dataset.k.split('.'), v=e.type==='time'?e.value:+e.value; if(e.type==='number' && !(v>0) && e.dataset.k!=='dwell') return; if(path.length===2) S[path[0]][path[1]]=v; else S[path[0]]=v; render(); }); });
 $('runtabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.run=b.dataset.run; render(); });
 $('zin').onclick = () => zoomBy(0.6); $('zout').onclick = () => zoomBy(1/0.6); $('zreset').onclick = () => { MAP.vb = {...MAP.home}; drawMap(); };
-document.addEventListener('keydown',e=>{ if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return; if(e.key==='ArrowRight') go(S.step+1); if(e.key==='ArrowLeft') go(S.step-1); });
+document.addEventListener('keydown',e=>{ if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return; if(e.key==='ArrowRight') nxt(); if(e.key==='ArrowLeft') prv(); });
+window.matchMedia('(max-width:560px)').addEventListener('change',()=>render());
 fitHome(); render(); _first = false;
 </script>
-</body>
 </html>
