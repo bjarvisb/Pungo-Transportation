@@ -66,6 +66,7 @@ header h1{text-align:left;font-size:52px;line-height:1.0;letter-spacing:-.01em;c
 .takeaway strong{font-size:24px;line-height:1.2;color:var(--ink)}
 .takeaway span{font-size:19px;color:var(--text)}
 ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.subnote{margin:2px 0 0;font-size:14px;line-height:1.35;color:var(--muted)}
 .gets{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:12px;line-height:1.4}
 .gets b{color:var(--ink)}
 .call{display:grid;grid-template-columns:38px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
@@ -73,6 +74,28 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .call i{font-style:normal;width:32px;height:32px;border-radius:50%;background:var(--teal);color:#06122E;font-weight:700;display:grid;place-items:center;margin-top:2px}
 .call strong{display:block;font-size:21px;line-height:1.2;color:var(--ink)}
 .call span{color:var(--text);font-size:16px}
+.call span b{color:var(--ink)}
+.vs{display:flex;gap:12px;margin-top:8px}
+.vs>div{flex:1;background:rgba(60,195,211,.09);border:1px solid rgba(60,195,211,.32);border-radius:12px;padding:8px 12px}
+.vs b{font-size:34px;line-height:1;color:var(--teal-ink);font-weight:800}
+.vs small{font-size:15px;color:var(--text);margin-left:6px;font-weight:600}
+.vs em{display:block;font-style:normal;font-size:14px;color:var(--muted);margin-top:3px}
+.topics{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:9px}
+.topics li{display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;color:var(--ink);font-size:17px;line-height:1.3}
+.topics li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:.5em}
+.gng{display:grid;gap:10px;margin-top:8px}
+.gng>div{display:grid;grid-template-columns:62px 1fr;gap:12px;align-items:start;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04)}
+.gng b{font-size:14.5px;text-align:center;padding:3px 0;border-radius:999px;color:#06122E}
+.gng .go b{background:var(--teal)}
+.gng .nogo b{background:var(--orange)}
+.gng span{font-size:16px;line-height:1.35;color:var(--text)}
+.ask.worth{font-size:19px;padding:15px 18px}
+.sig{display:flex;align-items:baseline;gap:16px;background:rgba(60,195,211,.09);border:1px solid rgba(60,195,211,.32);border-radius:12px;padding:14px 18px}
+.sig b{font-size:44px;line-height:1;color:var(--teal-ink);font-weight:800;white-space:nowrap}
+.sig span{font-size:17px;line-height:1.3;color:var(--ink);flex:1;min-width:0}
+.askl{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:5px;color:var(--ink)}
+.askl li{position:relative;padding-left:20px}
+.askl li::before{content:"";position:absolute;left:0;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--orange)}
 .good{color:var(--good);font-weight:700}
 .ask{background:linear-gradient(135deg,#1F3C8A,#172E69);color:#fff;border-radius:12px;border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 34px rgba(2,8,28,.45);padding:18px 20px;font-size:19px;line-height:1.35}
 .ask b{color:var(--orange-ink)}
@@ -80,11 +103,13 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .r8note{margin:0;font-size:15.5px;color:var(--muted)}
 .askcost{margin-top:8px;font-size:15px;line-height:1.35;color:#DCE3F5}
 .nav{display:flex;align-items:center;gap:18px;margin-top:auto;padding-top:6px}
-.steps{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;min-width:0}
-.steps button{font:inherit;font-size:14.5px;font-weight:700;color:var(--muted);background:none;border:0;border-top:3px solid rgba(160,185,240,.22);padding:11px 0 0;text-align:left;cursor:pointer;transition:color .2s,border-color .2s}
-.steps button[data-done]{border-top-color:rgba(60,195,211,.45)}
-.steps button[aria-current=step]{color:var(--ink);border-top-color:var(--teal)}
-.steps button:hover{color:var(--ink)}
+.steps{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;min-width:0}
+.steps button{font:inherit;position:relative;height:30px;padding:0;border:0;background:none;cursor:pointer}
+.steps button::before{content:"";position:absolute;left:0;right:0;top:50%;height:6px;margin-top:-3px;border-radius:3px;background:rgba(243,103,33,.26);transition:background .2s}
+.steps button[data-done]::before{background:rgba(243,103,33,.6)}
+.steps button[aria-current=step]::before{background:var(--orange)}
+.steps button:hover::before{background:rgba(243,103,33,.8)}
+.steps button[aria-current=step]:hover::before{background:var(--orange)}
 .arrows{display:flex;gap:8px;flex:none}
 .chev{width:44px;height:44px;display:grid;place-items:center;padding:0;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:background .15s}
 .chev:hover:not([disabled]){background:rgba(255,255,255,.09)}
@@ -161,12 +186,25 @@ details.sub{background:rgba(255,255,255,.03)} details.sub>summary{font-size:15px
   .num span{font-size:16.5px}
   .glabel{font-size:13px}
   .gets{font-size:18.5px}
+  .subnote{font-size:15.5px}
   .call{grid-template-columns:46px 1fr;padding:15px 0}
   .call i{width:36px;height:36px;font-size:18px}
   .call strong{font-size:26px}
   .call span{font-size:19px;line-height:1.4}
   .ask{font-size:22px;padding:22px 24px}
-  .askcost{font-size:17.5px;margin-top:10px}
+  .askcost{font-size:17.5px;margin-top:12px}
+  .topics li{font-size:19px}
+  .sig b{font-size:54px}
+  .sig span{font-size:19px}
+  .ask.worth{font-size:21px;padding:16px 20px}
+  .gng span{font-size:17.5px}
+  .gng b{font-size:15.5px}
+  .gng>div{grid-template-columns:70px 1fr}
+  .vs b{font-size:42px}
+  .vs small{font-size:17px}
+  .vs em{font-size:15.5px}
+  .vs>div{padding:8px 14px}
+  .vs{margin-top:6px}
   #runtabs[hidden],#runline[hidden]{display:flex!important;visibility:hidden}
   #runline[hidden]{display:block!important}
   body{overflow-x:hidden}
@@ -185,7 +223,6 @@ details.sub{background:rgba(255,255,255,.03)} details.sub>summary{font-size:15px
       <div class="tabs" id="runtabs" role="group" aria-label="Run" hidden>
         <button class="tab" type="button" data-run="am" aria-pressed="true">Morning</button>
         <button class="tab" type="button" data-run="pm" aria-pressed="false">Afternoon</button>
-        <button class="tab" type="button" data-run="late" aria-pressed="false">5:40 late bus (estimate)</button>
       </div>
       <p class="runline" id="runline" hidden></p>
       <div class="mapbox" id="mapbox">
@@ -198,24 +235,11 @@ details.sub{background:rgba(255,255,255,.03)} details.sub>summary{font-size:15px
   </div>
 
   <details>
-    <summary>Backup: the numbers, options tested, open items</summary>
+    <summary>Backup: the numbers and assumptions</summary>
     <div class="body">
       <div class="facts">
         <div class="fact"><h3>Ride time from Home Depot</h3><dl id="f-ride"></dl></div>
         <div class="fact"><h3>Door to school, morning</h3><p class="note">Average for families in the Home Depot area</p><dl id="f-door"></dl></div>
-        <div class="fact"><h3>A parent's driving per day</h3><p class="note">One parent doing drop-off and pickup</p><dl id="f-parent"></dl></div>
-      </div>
-      <div class="facts two">
-        <div class="fact"><h3>Options tested</h3><dl id="f-opts"></dl></div>
-        <div class="fact"><h3>Not answered yet</h3>
-          <ul class="plain tight">
-            <li>Business office: how many of the 10 Home Depot riders ride in the morning (3 from 23456, 7 from other zips).</li>
-            <li>Business office: confirm none of our 23456 students ride Route 15.</li>
-            <li>Family survey: how many would actually ride.</li>
-            <li>Tranquest: driver cost and terms, and who supervises younger riders.</li>
-            <li>A 7:15 AM test drive. I-64 from Indian River Road is the biggest unknown in the van's time.</li>
-            <li>The 5:40 run is an estimate and changes by season.</li>
-          </ul></div>
       </div>
       <details class="sub">
         <summary>Assumptions and method</summary>
@@ -223,13 +247,11 @@ details.sub{background:rgba(255,255,255,.03)} details.sub>summary{font-size:15px
           <div class="fields">
             <label>Arrive at school<input type="time" id="in-arrive" data-k="arrive"></label>
             <label>Afternoon run departs<input type="time" id="in-pm" data-k="pmDepart"></label>
-            <label>Late bus departs<input type="time" id="in-late" data-k="lateDepart"></label>
             <label>Minutes per stop<input type="number" id="in-dwell" data-k="dwell" min="0" step="0.5"></label>
             <label>Traffic factor, morning<input type="number" id="in-mam" data-k="mult.am" min="1" max="2.5" step="0.01"></label>
             <label>Traffic factor, afternoon<input type="number" id="in-mpm" data-k="mult.pm" min="1" max="2.5" step="0.01"></label>
-            <label>Traffic factor, 5:40<input type="number" id="in-mlate" data-k="mult.late" min="1" max="2.5" step="0.01"></label>
           </div>
-          <p class="note">Route 8 times come from its schedule: Home Depot pickup 6:52 AM, school arrival 8:00 AM, and the afternoon run, which leaves about 3:20 and reaches Home Depot at 4:24. Van times use road data with traffic factors set so the same method reproduces Route 8's scheduled times, plus three minutes at the stop. Door-to-school times add the drive to Home Depot and five minutes at the stop. Homes are shown rounded to about a quarter mile. The Route 8 saving assumes its bus starts and ends at school and that General Booth and S. Birdneck becomes its first morning stop.</p>
+          <p class="note">Route 8 times come from its schedule: Home Depot pickup 6:52 AM, school arrival 8:00 AM, and the afternoon run, which leaves about 3:20 and reaches Home Depot at 4:24. Van times use road data with traffic factors set so the same method reproduces Route 8's scheduled times, plus three minutes at the stop. Door-to-school times add the drive to Home Depot and five minutes at the stop. Homes are shown rounded to about a quarter mile. Late days stay on the existing late activity bus (NA-Ath-3), which stops at Home Depot at 6:36 PM. The Route 8 saving assumes its bus starts and ends at school and that General Booth and S. Birdneck becomes its first morning stop.</p>
         </div>
       </details>
     </div>
@@ -254,8 +276,8 @@ const PTS = {school:[36.875416,-76.190423], HD:[36.758301,-76.011183], CW:[36.73
 /* Proposed plan: one van, Home Depot direct. Salem Crossing and Bridge Church are kept only as tested options. */
 const PLAN_SET = ['HD'], MEET = {HD:'HD',CW:'HD',W:'HD'};
 const WAIT = 5; /* minutes a family allows at the stop before pickup */
-const S = { step:1, sub:1, fresh:false, run:'am', arrive:'08:00', pmDepart:'15:20', lateDepart:'17:40', dwell:3,
-  mult:{am:+(14/D.calib.am_ff).toFixed(2), pm:+(24/D.calib.pm_ff).toFixed(2), late:1.15} };
+const S = { step:1, sub:1, fresh:false, run:'am', arrive:'08:00', pmDepart:'15:20', dwell:3,
+  mult:{am:+(14/D.calib.am_ff).toFixed(2), pm:+(24/D.calib.pm_ff).toFixed(2) } };
 const $ = id => document.getElementById(id);
 const toMin = s => { const [h,m] = s.split(':').map(Number); return h*60+m; };
 const fmt = t => { t = Math.round(t); let h = Math.floor(t/60)%24, m = ((t%60)+60)%60; const ap = h>=12?'PM':'AM'; h = h%12||12; return h+':'+String(m).padStart(2,'0')+' '+ap; };
@@ -274,7 +296,7 @@ function evalRun(type, order, wts){
     order.forEach((k,i)=>res.stops.push({k,t:T[i],ride:A-T[i]}));
     res.start = T[0]; res.end = A; res.dead = lm('school',order[0]);
   } else {
-    seq = ['school',...order]; const D0 = toMin(type==='pm'?S.pmDepart:S.lateDepart); let t = D0;
+    seq = ['school',...order]; const D0 = toMin(S.pmDepart); let t = D0;
     for(let i=0;i<n;i++){ t += lm(seq[i],seq[i+1]); res.stops.push({k:order[i],t,ride:t-D0}); t += dw; }
     res.start = D0; res.end = t-dw; res.dead = lm(order[n-1],'school');
   }
@@ -345,7 +367,7 @@ function nbCompare(z, nv){
 function model(){
   const Zs = assign(PLAN_SET, MEET), used = PLAN_SET.filter(k=>Zs[k]);
   const w = Object.fromEntries(used.map(k=>[k,Zs[k].students]));
-  const am = planCore('am',used,1,w), pm = planCore('pm',used,1,w), late = planCore('late',['HD'],1,{HD:2});
+  const am = planCore('am',used,1,w), pm = planCore('pm',used,1,w);
   const m = S.mult.am; let r8 = {sum:0,max:0,within:0}, van = {sum:0,max:0,within:0}, tot = 0;
   D.hh.forEach(h=>{
     const a = h.d.HD*m, b = h.d[target(h.z,used,MEET)]*m; tot += h.s;
@@ -353,7 +375,7 @@ function model(){
     if(a<=15) r8.within += h.s; if(b<=15) van.within += h.s;
   });
   r8.avg = r8.sum/tot; van.avg = van.sum/tot;
-  return {Zs, used, am, pm, late, r8, van, tot};
+  return {Zs, used, am, pm, r8, van, tot};
 }
 
 /* ---------- map: web-mercator over stitched tiles ---------- */
@@ -383,20 +405,20 @@ function fitHome(){
   MAP.home={x:x0,y:y0,w,h}; MAP.vb={...MAP.home};
 }
 function drawMap(){
-  const box = $('map'), cw = Math.max(box.clientWidth||700, 320), v = MAP.vb, u = v.w/cw, p = MAP.cur, st = S.step; let g = '';
-  const halo = (x,y,txt,size,fill,extra='') => `<text x="${x}" y="${y}" font-size="${size*u}" font-weight="700" fill="${fill}" paint-order="stroke" stroke="#FFFFFF" stroke-opacity=".92" stroke-width="${3.8*u}" stroke-linejoin="round" ${extra}>${txt}</text>`;
+  const box = $('map'), cw = Math.max(box.clientWidth||700, 320), v = MAP.vb, u = v.w/cw, p = MAP.cur, st = S.step, k = cw<600?0.7:1; let g = '';
+  const halo = (x,y,txt,size,fill,extra='') => `<text x="${x}" y="${y}" font-size="${size*u}" font-weight="700" fill="${fill}" paint-order="stroke" stroke="#FFFFFF" stroke-opacity=".92" stroke-width="${(size>=14?5:3.8)*u}" stroke-linejoin="round" ${extra}>${txt}</text>`;
   if(D.basemap) g += `<image href="${D.basemap.img}" x="0" y="0" width="${MAP.W}" height="${MAP.H}" preserveAspectRatio="none"/>`;
   const label = {};
-  const showR8 = st>=2 && !(st===3 && S.run==='late');
+  const showR8 = st>=2 && st<=3;
   if(showR8){
     let ln8 = D.r8line; if(st===3){ let bi=0, bd=1e9; ln8.forEach((q,i)=>{ const dd=Math.hypot(q[0]-36.8106,(q[1]+75.9898)*0.8); if(dd<bd){bd=dd;bi=i;} }); ln8 = ln8.slice(bi); }
     const L8 = ln8.map(q=>proj(q[0],q[1]).map(n=>n.toFixed(1)).join(',')).join(' ');
     g += `<polyline points="${L8}" fill="none" stroke="#FFFFFF" stroke-width="${8.5*u}" stroke-linecap="round" stroke-linejoin="round" opacity=".92"/><polyline points="${L8}" fill="none" stroke="#FF7A2E" stroke-width="${4.6*u}" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${12*u} ${7*u}"/>`;
     R8_STOPS.forEach(s=>{ const [x,y]=proj(s[1],s[2]); g += `<circle cx="${x}" cy="${y}" r="${4*u}" fill="#0A1431" stroke="#FF8A4C" stroke-width="${2*u}"><title>Route 8: ${s[0]} (${s[3]}), position approximate</title></circle>`; });
     const [lx,ly] = proj(36.8450,-75.9780), rr = (st===3&&S.run==='pm')?R8_RIDE_PM:R8_RIDE_AM;
-    g += halo(lx-14*u,ly-4*u,st===3?'Route 8 without Home Depot':`Route 8 today: ${rr} min`,15,'#B8470F','text-anchor="end"');
+    g += halo(lx-14*u,ly-4*u,st===3?'Route 8 without Home Depot':`Route 8 today: ${rr} min`,18*k,'#8C3200','text-anchor="end"');
   }
-  if(st===3 && p){
+  if((st===3||st===4) && p){
     const pl = p.plans[0], seq = pl.best.seq;
     for(let i=0;i<seq.length-1;i++){
       const L = leg(seq[i],seq[i+1]).line.map(q=>proj(q[0],q[1]).map(n=>n.toFixed(1)).join(',')).join(' ');
@@ -404,8 +426,8 @@ function drawMap(){
     }
     pl.best.order.forEach((k,i)=>label[k] = String(i+1));
     const hd = p.flat.find(a=>a.k==='HD');
-    if(hd && S.run!=='late'){ const ln = leg(seq[0],seq[1]).line, m = ln[Math.floor(ln.length*0.55)], [vx,vy] = proj(m[0],m[1]);
-      g += halo(vx+8*u,vy-12*u,`Van: ${Math.round(hd.ride)} min`,16,'#172E69'); }
+    if(hd && st===3){ const ln = leg(seq[0],seq[1]).line, m = ln[Math.floor(ln.length*0.55)], [vx,vy] = proj(m[0],m[1]);
+      g += halo(vx+8*u,vy-12*u,`Van: ${Math.round(hd.ride)} min`,19*k,'#0A1431'); }
   }
   // student homes, rounded to about a quarter mile
   D.dots.forEach(d=>{
@@ -414,17 +436,15 @@ function drawMap(){
     if(d.n>1) g += `<text x="${x}" y="${y+4.4*u}" text-anchor="middle" font-size="${12*u}" font-weight="700" fill="#06122E">${d.n}</text>`;
   });
   const stopsToDraw = st>=2 ? ['HD'] : [];
-  stopsToDraw.forEach(k=>{
-    const [x,y] = proj(...PTS[k]), L = label[k];
+  stopsToDraw.forEach(kk=>{
+    const [x,y] = proj(...PTS[kk]), L = label[kk];
     g += `<circle cx="${x}" cy="${y}" r="${14*u}" fill="${L?'#F36721':'#0A1431'}" stroke="${L?'#fff':'#FF8A4C'}" stroke-width="${2.6*u}"/>`;
     g += `<text x="${x}" y="${y+5*u}" text-anchor="middle" font-size="${13*u}" font-weight="700" fill="${L?'#0A1431':'#FF8A4C'}">${L||'\u2022'}</text>`;
-    g += halo(x+19*u,y+5*u,SHORT[k],16,'#172E69');
+    g += k<1 ? halo(x-16*u,y-20*u,SHORT[kk],23*k,'#0A1431','text-anchor="end"') : halo(x+16*u,y-20*u,SHORT[kk],23*k,'#0A1431');
   });
   const [sx,sy] = proj(...PTS.school);
   g += `<rect x="${sx-12*u}" y="${sy-12*u}" width="${24*u}" height="${24*u}" rx="${4*u}" fill="#fff" stroke="#3CC3D3" stroke-width="${2.6*u}"/><text x="${sx}" y="${sy+5.5*u}" text-anchor="middle" font-size="${15*u}" font-weight="700" fill="#172E69">N</text>`;
-  g += halo(sx+19*u,sy+5*u,'Norfolk Academy',16,'#172E69');
-  const mpp = 156543.03392*Math.cos(36.8*Math.PI/180)/Math.pow(2,Z), sb = 4828.03/mpp; /* 3 miles */
-  g += `<rect x="${v.x+10*u}" y="${v.y+v.h-30*u}" width="${sb+60*u}" height="${22*u}" fill="#0A1431" fill-opacity=".8" rx="${4*u}"/><line x1="${v.x+16*u}" x2="${v.x+16*u+sb}" y1="${v.y+v.h-14*u}" y2="${v.y+v.h-14*u}" stroke="#fff" stroke-width="${2.4*u}"/><text x="${v.x+22*u+sb}" y="${v.y+v.h-10*u}" font-size="${11*u}" fill="#fff">3 mi</text>`;
+  g += halo(sx+19*u,sy+8*u,'Norfolk Academy',23*k,'#0A1431');
   box.innerHTML = `<svg viewBox="${v.x} ${v.y} ${v.w} ${v.h}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`;
   $('attrib').hidden = !D.basemap;
   const svg = box.firstChild; let drag = null;
@@ -438,27 +458,27 @@ function drawMap(){
 }
 
 /* ---------- the three steps ---------- */
-const STEPS = 3;
+const STEPS = 4;
 const staged = () => !window.matchMedia('(max-width:560px)').matches;
 function panelHTML(M, hdA, hdP, wA, wP){
   const east = D.hh.filter(h=>h.z==='HD'), en = east.reduce((s,h)=>s+h.s,0);
   const eastDrive = Math.round(east.reduce((s,h)=>s+h.d.school*h.s,0)/en*S.mult.am);
   const eastToStop = east.reduce((s,h)=>s+h.d.HD*h.s,0)/en*S.mult.am, doorGap = Math.round((R8_RIDE_AM+eastToStop-eastDrive)/5)*5;
   const nW = D.hh.filter(h=>h.z==='W').reduce((s,h)=>s+h.s,0), cw = D.hh.filter(h=>h.z==='CW'), nCW = cw.reduce((s,h)=>s+h.s,0), cwFar = Math.round(Math.max(...cw.map(h=>h.d.W))*S.mult.am/5)*5;
-  const LABELS = ['Questions','Today','Proposal'];
+  const LABELS = ['Questions','Today','Proposal','Survey'];
   const chev = d => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
-  const nav = `<div class="nav"><div class="steps" role="group" aria-label="Steps">${[1,2,3].map(i=>`<button type="button" data-step="${i}" ${i<S.step?'data-done':''} ${i===S.step?'aria-current="step"':''}>${LABELS[i-1]}</button>`).join('')}</div>
+  const nav = `<div class="nav"><div class="steps" role="group" aria-label="Steps">${[1,2,3,4].map(i=>`<button type="button" data-step="${i}" aria-label="${LABELS[i-1]}" title="${LABELS[i-1]}" ${i<S.step?'data-done':''} ${i===S.step?'aria-current="step"':''}></button>`).join('')}</div>
     <div class="arrows"><button class="chev" type="button" id="back" aria-label="Back" ${S.step===1?'disabled':''}>${chev('M15 5l-7 7 7 7')}</button>
     <button class="chev" type="button" id="next" aria-label="Next" ${S.step===STEPS?'disabled':''}>${chev('M9 5l7 7-7 7')}</button></div></div>`;
   if(S.step===1) return `<div class="eyebrow">The questions</div>
-    <ol class="qs"><li>How well do Pungo families know us?</li><li>What does it take to get here?</li><li>What would a dedicated route change?</li></ol>${nav}`;
+    <ol class="qs"><li>What are additional ways to grow in Pungo?</li><li>How do current families get here?</li><li>Would a direct route make us more appealing?</li></ol>${nav}`;
   if(S.step===2) return `<div class="eyebrow">Where we are today</div>
     <div class="grp"><div class="glabel">Our students</div>
       <div class="nums three">
         <div class="num"><b>${M.tot}</b><span>enrolled from 23456</span></div>
         <div class="num"><b>${D.hh.length}</b><span>families</span></div>
         <div class="num low"><b>3</b><span>ride the bus</span></div>
-      </div></div>
+      </div><p class="subnote">7 more students ride Route 8 from Home Depot and live in other zip codes, 4 of them in 23454.</p></div>
     <div class="more ${staged()&&S.sub<2?'hold':''} ${S.fresh?'fresh':''}">
     <div class="grp"><div class="glabel">Getting to school</div>
       <div class="nums two">
@@ -466,15 +486,28 @@ function panelHTML(M, hdA, hdP, wA, wP){
         <div class="num hot"><b>${R8_RIDE_AM} <small>min</small></b><span>Bus Route 8 ride time, morning; ${R8_RIDE_PM} home</span></div>
       </div></div>
     <div><h3>What we think gets in the way</h3>
-    <ul class="gets"><li><b>Distance.</b> Pungo families drive about ${eastDrive} minutes each way.</li><li><b>The bus.</b> Route 8 is more than an hour each way, a lot to ask of a younger student.</li><li><b>Awareness.</b> We are still building our name here.</li></ul></div></div>${nav}`;
+    <ul class="gets"><li><b>Distance.</b> Pungo families drive about ${eastDrive} minutes to school.</li><li><b>The bus.</b> Route 8 is more than an hour each way, a lot to ask of a younger student.</li><li><b>Awareness.</b> We have lower visibility in this area of Virginia Beach.</li></ul></div></div>${nav}`;
+  if(S.step===4) return `<div class="eyebrow">The survey</div>
+    <div class="grp"><div class="glabel">Who we ask</div>
+      <div class="nums two">
+        <div class="num"><b>${D.hh.length}</b><span>families in 23456</span></div>
+        <div class="num"><b>7</b><span>riders from other zips</span></div>
+      </div><p class="subnote">Plus a few nearby families who do not ride yet.</p></div>
+    <div class="grp"><div class="glabel">What we ask</div>
+      <ul class="topics"><li>How your child gets to school today</li><li>Would a direct route make the bus option preferable, at today's fees</li><li>Who else nearby might consider us</li></ul></div>
+    <div class="grp"><div class="glabel">The signal to move forward</div>
+      <div class="sig"><b>3 to 5</b><span>additional riders who do not ride today</span></div></div>
+    ${nav}`;
   return `<div class="eyebrow">The proposal</div>
     <div>
-      <div class="call"><i>1</i><div><strong>More visibility.</strong><span>A branded van, three runs a day.</span></div></div>
-      <div class="call"><i>2</i><div><strong>Shorter rides, more riders.</strong><span>Near Home Depot: <span class="good">${Math.round(hdA.ride)}</span> minutes in the morning instead of ${R8_RIDE_AM}, <span class="good">${Math.round(hdP.ride)}</span> home instead of ${R8_RIDE_PM}.</span></div></div>
-      <div class="call"><i>3</i><div><strong>A path to Norfolk Academy.</strong><span>Families south of Home Depot can start in Lower School without putting a six-year-old on an hour-long bus ride.</span></div></div>
+      <div class="call"><i>1</i><div><strong>More visibility.</strong><span>A branded van, two runs a day.</span></div></div>
+      <div class="call"><i>2</i><div><strong>Shorter rides, more riders.</strong><span>Near Home Depot vs. Route 8</span>
+        <div class="vs"><div><b>${Math.round(hdA.ride)}</b><small>min</small><em>morning, was ${R8_RIDE_AM}</em></div><div><b>${Math.round(hdP.ride)}</b><small>min</small><em>home, was ${R8_RIDE_PM}</em></div></div></div></div>
+      <div class="call"><i>3</i><div><strong>A path to Norfolk Academy.</strong><span>A ride a six-year-old can handle.</span></div></div>
     </div>
-    <div class="ask"><b>Explore:</b> one semester with the 14-seat van, Home Depot direct, starting with a family survey.
-      <div class="askcost">Cost: a dedicated Tranquest driver and use of our van, partly offset by Route 8 savings and new rider fees. Figures and terms to come, pending Tranquest.</div></div>${nav}`;
+    <div class="ask"><b>Explore: one semester</b>
+      <ul class="askl"><li>14-seat van, Home Depot direct</li><li>Morning and afternoon runs; late bus riders stay on Route 8</li><li>Starts with a family survey</li></ul>
+      <div class="askcost">Cost: a Tranquest driver and our van, partly offset by Route 8 savings and new rider fees. Figures pending Tranquest.</div></div>${nav}`;
 }
 
 function render(){
@@ -485,13 +518,13 @@ function render(){
   document.querySelectorAll('.steps button').forEach(b=>b.onclick=()=>go(+b.dataset.step));
   $('runtabs').hidden = S.step!==3; $('runline').hidden = S.step!==3;
   document.querySelectorAll('#runtabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.run===S.run)));
-  const cur = S.run==='am'?M.am : S.run==='pm'?M.pm : M.late;
+  const cur = S.run==='am'?M.am : M.pm;
   MAP.cur = cur; drawMap();
   const b = cur.plans[0].best, parts = b.stops.map(x=>`${SHORT[x.k]} ${fmt(x.t)}`);
-  $('runline').textContent = S.run==='am' ? `Pick up ${parts.join(', then ')}; arrive at school ${fmt(b.end)}.` : `Leave school ${fmt(b.start)}; drop off ${parts.join(', then ')}.`;
+  $('runline').textContent = S.run==='late' ? 'Late days stay on the late bus (NA-Ath-3), as today. Home Depot stop at 6:36 PM.' : S.run==='am' ? `Pick up ${parts.join(', then ')}; arrive at school ${fmt(b.end)}.` : `Leave school ${fmt(b.start)}; drop off ${parts.join(', then ')}.`;
   const lg = [`<span><i class="dot" style="background:#3CC3D3"></i>Student homes (rounded to about a quarter mile)</span>`];
-  if(S.step>=2 && !(S.step===3&&S.run==='late')) lg.push(`<span><i class="sw" style="border-top-style:dashed;border-color:#FF7A2E"></i>${S.step===3?'Route 8 without Home Depot':'Route 8 today'} (approximate path)</span>`);
-  if(S.step===3) lg.push(`<span><i class="sw" style="border-color:#6F8FE0"></i>Proposed van route</span>`);
+  if(S.step>=2 && S.step<=3) lg.push(`<span><i class="sw" style="border-top-style:dashed;border-color:#FF7A2E"></i>${S.step===3?'Route 8 without Home Depot':'Route 8 today'} (approximate path)</span>`);
+  if(S.step>=3) lg.push(`<span><i class="sw" style="border-color:#6F8FE0"></i>Proposed van route</span>`);
   $('legend').innerHTML = lg.join('');
 
   // backup facts
@@ -499,19 +532,10 @@ function render(){
   const avgD = k => hdH.reduce((x,h)=>x+h.d[k]*h.s,0)/hn;
   const toStop = avgD('HD')*am, drive = avgD('school')*am;
   const doorVan = toStop+WAIT+hdA.ride, doorR8 = toStop+WAIT+R8_RIDE_AM;
-  const parNow = 2*avgD('school')*(am+pmF), parVan = 2*avgD('HD')*(am+pmF);
   const hm = m => { m = Math.round(m/5)*5; const h = Math.floor(m/60), r = m%60; return h ? `about ${h} hr${r?' '+r+' min':''}` : `about ${m} min`; };
   const dl = rs => rs.map(r=>`<dt>${r[0]}${r[2]?`<small>${r[2]}</small>`:''}</dt><dd class="${r[3]||''}">${r[1]}</dd>`).join('');
   $('f-ride').innerHTML = dl([['Route 8, morning',`${R8_RIDE_AM} min`],['Van, morning',min1(hdA.ride),'','win'],['Route 8, afternoon',`${R8_RIDE_PM} min`],['Van, afternoon',min1(hdP.ride),'','win'],['Route 8 bus, no Home Depot leg','20 min less a day','its riders keep their times','soft']]);
   $('f-door').innerHTML = dl([['Parent drives',min1(drive)],['Van',min1(doorVan),'drive to Home Depot, wait, ride','win'],['Route 8 today',min1(doorR8),'drive to Home Depot, wait, ride']]);
-  $('f-parent').innerHTML = dl([['Driving to school',hm(parNow)],['With the van',hm(parVan),'two trips to Home Depot and back','win']]);
-  const two = layout(['HD','W'],1,{HD:'HD',CW:'W',W:'W'}), tHD = two.am.flat.find(x=>x.k==='HD'), tHDp = two.pm.flat.find(x=>x.k==='HD');
-  const three = layout(['HD','CW','W'],1,{HD:'HD',CW:'CW',W:'W'}), cHD = three.am.flat.find(x=>x.k==='HD');
-  $('f-opts').innerHTML = dl([
-    ['Home Depot direct','proposed','','win'],
-    ['Add Salem Crossing',`+${Math.round(tHD.ride-hdA.ride)} AM, +${Math.round(tHDp.ride-hdP.ride)} PM`,`Route 15 already stops about a mile away; our Salem families do not ride it`],
-    ['Add Bridge Church and Salem',`+${Math.round(cHD.ride-hdA.ride)} min AM`,`Puts the Home Depot ride at ${Math.round(cHD.ride)} min, close to Route 8`],
-    ['Two vans','not needed yet','14 seats covers today\'s 10 riders','soft']]);
 }
 let _first = true;
 let _key = false;
@@ -540,7 +564,7 @@ function fitScreen(){
   if(!wide()) return;
   /* measure the tallest step so nothing runs off the bottom on any page */
   const keep = {step:S.step, sub:S.sub}; let need = 0;
-  [[1,2],[2,2],[3,2]].forEach(([st,sb])=>{ S.step = st; S.sub = sb; render(); need = Math.max(need, $('panel').scrollHeight); });
+  [[1,2],[2,2],[3,2],[4,2]].forEach(([st,sb])=>{ S.step = st; S.sub = sb; render(); need = Math.max(need, $('panel').scrollHeight); });
   S.step = keep.step; S.sub = keep.sub; render();
   const top = w.getBoundingClientRect().top, hd = document.querySelector('header').getBoundingClientRect().bottom;
   const mc = document.querySelector('.mapcol').getBoundingClientRect().bottom;
