@@ -273,6 +273,8 @@ const R8_STOPS = [
   ['Harbour Point & Fishermans Bend',36.8286,-75.9761,'7:06 AM / 4:09 PM'],['S. Atlantic & Twilight',36.8243,-75.9696,'4:13 PM'],['General Booth & S. Birdneck',36.8106,-75.9898,'4:18 PM']
 ];
 const PTS = {school:[36.875416,-76.190423], HD:[36.758301,-76.011183], CW:[36.7320,-76.0928], W:[36.7922,-76.1219]};
+const RID = [[36.736,-76.0],[36.728,-76.088],[36.756,-75.98]]; // the 3 students who ride the bus today (same rounded grid)
+const OTH = [{lat:36.772,lon:-76.008,n:3},{lat:36.776,lon:-75.980,n:1},{lat:36.764,lon:-76.072,n:1}]; // other-zip Route 8 riders, rounded to the same grid
 /* Proposed plan: one van, Home Depot direct. Salem Crossing and Bridge Church are kept only as tested options. */
 const PLAN_SET = ['HD'], MEET = {HD:'HD',CW:'HD',W:'HD'};
 const WAIT = 5; /* minutes a family allows at the stop before pickup */
@@ -431,9 +433,14 @@ function drawMap(){
   }
   // student homes, rounded to about a quarter mile
   D.dots.forEach(d=>{
-    const [x,y] = proj(d.lat,d.lon), r = (6+2.6*Math.sqrt(d.n))*u;
-    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="#3CC3D3" stroke="#0A1431" stroke-width="${2*u}"><title>${d.n} student${d.n>1?'s':''}, location rounded</title></circle>`;
+    const [x,y] = proj(d.lat,d.lon), r = (6+2.6*Math.sqrt(d.n))*u, rd = st===2 && RID.some(q=>Math.abs(q[0]-d.lat)<0.001 && Math.abs(q[1]-d.lon)<0.001);
+    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="${rd?'#000':'#3CC3D3'}" stroke="${rd?'#fff':'#0A1431'}" stroke-width="${2*u}"><title>${d.n} student${d.n>1?'s':''}, location rounded</title></circle>`;
     if(d.n>1) g += `<text x="${x}" y="${y+4.4*u}" text-anchor="middle" font-size="${12*u}" font-weight="700" fill="#06122E">${d.n}</text>`;
+  });
+  if(st===2) OTH.forEach(d=>{
+    const [x,y] = proj(d.lat,d.lon), r = (6+2.6*Math.sqrt(d.n))*u;
+    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="#9B6BFF" stroke="#0A1431" stroke-width="${2*u}"><title>${d.n} Route 8 rider${d.n>1?'s':''} from another zip code, location rounded</title></circle>`;
+    if(d.n>1) g += `<text x="${x}" y="${y+4.4*u}" text-anchor="middle" font-size="${12*u}" font-weight="700" fill="#0A1431">${d.n}</text>`;
   });
   const stopsToDraw = st>=2 ? ['HD'] : [];
   stopsToDraw.forEach(kk=>{
@@ -523,6 +530,8 @@ function render(){
   const b = cur.plans[0].best, parts = b.stops.map(x=>`${SHORT[x.k]} ${fmt(x.t)}`);
   $('runline').textContent = S.run==='late' ? 'Late days stay on the late bus (NA-Ath-3), as today. Home Depot stop at 6:36 PM.' : S.run==='am' ? `Pick up ${parts.join(', then ')}; arrive at school ${fmt(b.end)}.` : `Leave school ${fmt(b.start)}; drop off ${parts.join(', then ')}.`;
   const lg = [`<span><i class="dot" style="background:#3CC3D3"></i>Student homes (rounded to about a quarter mile)</span>`];
+  if(S.step===2) lg.push(`<span><i class="dot" style="background:#000;box-shadow:0 0 0 1.5px #fff"></i>Ride the bus today</span>`);
+  if(S.step===2) lg.push(`<span><i class="dot" style="background:#9B6BFF"></i>Route 8 riders from other zip codes (nearby)</span>`);
   if(S.step>=2 && S.step<=3) lg.push(`<span><i class="sw" style="border-top-style:dashed;border-color:#FF7A2E"></i>${S.step===3?'Route 8 without Home Depot':'Route 8 today'} (approximate path)</span>`);
   if(S.step>=3) lg.push(`<span><i class="sw" style="border-color:#6F8FE0"></i>Proposed van route</span>`);
   $('legend').innerHTML = lg.join('');
