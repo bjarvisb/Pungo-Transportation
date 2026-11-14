@@ -131,6 +131,11 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .legend span{display:inline-flex;align-items:center;gap:7px}
 .sw{display:inline-block;width:20px;height:0;border-top:4px solid}
 .dot{display:inline-block;width:12px;height:12px;border-radius:50%}
+.tg{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:15px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:4px 14px 4px 11px;cursor:pointer}
+.tg .dot{opacity:.45;box-shadow:0 0 0 1.5px rgba(255,255,255,.35)}
+.tg[aria-pressed="true"]{color:var(--ink);background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+.tg[aria-pressed="true"] .dot{opacity:1}
+.tg:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 details{background:var(--surface);border:1px solid var(--line);border-radius:14px}
 details>summary{cursor:pointer;font-weight:700;color:var(--ink);padding:14px 18px;list-style:none;display:flex;justify-content:space-between;gap:10px}
 details>summary::after{content:'+';color:var(--muted)}
@@ -278,7 +283,7 @@ const OTH = [{lat:36.772,lon:-76.008,n:3},{lat:36.776,lon:-75.980,n:1},{lat:36.7
 /* Proposed plan: one van, Home Depot direct. Salem Crossing and Bridge Church are kept only as tested options. */
 const PLAN_SET = ['HD'], MEET = {HD:'HD',CW:'HD',W:'HD'};
 const WAIT = 5; /* minutes a family allows at the stop before pickup */
-const S = { step:1, sub:1, fresh:false, run:'am', arrive:'08:00', pmDepart:'15:20', dwell:3,
+const S = { step:1, sub:1, tgBus:false, tgOth:false, fresh:false, run:'am', arrive:'08:00', pmDepart:'15:20', dwell:3,
   mult:{am:+(14/D.calib.am_ff).toFixed(2), pm:+(24/D.calib.pm_ff).toFixed(2) } };
 const $ = id => document.getElementById(id);
 const toMin = s => { const [h,m] = s.split(':').map(Number); return h*60+m; };
@@ -433,13 +438,13 @@ function drawMap(){
   }
   // student homes, rounded to about a quarter mile
   D.dots.forEach(d=>{
-    const [x,y] = proj(d.lat,d.lon), r = (6+2.6*Math.sqrt(d.n))*u, rd = st===2 && RID.some(q=>Math.abs(q[0]-d.lat)<0.001 && Math.abs(q[1]-d.lon)<0.001);
-    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="${rd?'#000':'#3CC3D3'}" stroke="${rd?'#fff':'#0A1431'}" stroke-width="${2*u}"><title>${d.n} student${d.n>1?'s':''}, location rounded</title></circle>`;
+    const [x,y] = proj(d.lat,d.lon), r = (6+2.6*Math.sqrt(d.n))*u, rd = st===2 && S.tgBus && RID.some(q=>Math.abs(q[0]-d.lat)<0.001 && Math.abs(q[1]-d.lon)<0.001);
+    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="${rd?'#FF7A2E':'#3CC3D3'}" stroke="#0A1431" stroke-width="${2*u}"><title>${d.n} student${d.n>1?'s':''}, location rounded</title></circle>`;
     if(d.n>1) g += `<text x="${x}" y="${y+4.4*u}" text-anchor="middle" font-size="${12*u}" font-weight="700" fill="#06122E">${d.n}</text>`;
   });
-  if(st===2) OTH.forEach(d=>{
+  if(st===2 && S.tgOth) OTH.forEach(d=>{
     const [x,y] = proj(d.lat,d.lon), r = (6+2.6*Math.sqrt(d.n))*u;
-    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="#9B6BFF" stroke="#0A1431" stroke-width="${2*u}"><title>${d.n} Route 8 rider${d.n>1?'s':''} from another zip code, location rounded</title></circle>`;
+    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="#FFC24B" stroke="#0A1431" stroke-width="${2*u}"><title>${d.n} Route 8 rider${d.n>1?'s':''} from another zip code, location rounded</title></circle>`;
     if(d.n>1) g += `<text x="${x}" y="${y+4.4*u}" text-anchor="middle" font-size="${12*u}" font-weight="700" fill="#0A1431">${d.n}</text>`;
   });
   const stopsToDraw = st>=2 ? ['HD'] : [];
@@ -530,8 +535,10 @@ function render(){
   const b = cur.plans[0].best, parts = b.stops.map(x=>`${SHORT[x.k]} ${fmt(x.t)}`);
   $('runline').textContent = S.run==='late' ? 'Late days stay on the late bus (NA-Ath-3), as today. Home Depot stop at 6:36 PM.' : S.run==='am' ? `Pick up ${parts.join(', then ')}; arrive at school ${fmt(b.end)}.` : `Leave school ${fmt(b.start)}; drop off ${parts.join(', then ')}.`;
   const lg = [`<span><i class="dot" style="background:#3CC3D3"></i>Student homes (rounded to about a quarter mile)</span>`];
-  if(S.step===2) lg.push(`<span><i class="dot" style="background:#000;box-shadow:0 0 0 1.5px #fff"></i>Ride the bus today</span>`);
-  if(S.step===2) lg.push(`<span><i class="dot" style="background:#9B6BFF"></i>Route 8 riders from other zip codes (nearby)</span>`);
+  if(S.step===2){
+    lg.push(`<button type="button" class="tg" data-tg="bus" aria-pressed="${S.tgBus}"><i class="dot" style="background:#FF7A2E"></i>Ride the bus today (3)</button>`);
+    lg.push(`<button type="button" class="tg" data-tg="oth" aria-pressed="${S.tgOth}"><i class="dot" style="background:#FFC24B"></i>Other zip codes, ride Route 8 (5)</button>`);
+  }
   if(S.step>=2 && S.step<=3) lg.push(`<span><i class="sw" style="border-top-style:dashed;border-color:#FF7A2E"></i>${S.step===3?'Route 8 without Home Depot':'Route 8 today'} (approximate path)</span>`);
   if(S.step>=3) lg.push(`<span><i class="sw" style="border-color:#6F8FE0"></i>Proposed van route</span>`);
   $('legend').innerHTML = lg.join('');
@@ -548,9 +555,10 @@ function render(){
 }
 let _first = true;
 let _key = false;
+document.addEventListener('click',e=>{ const b=e.target.closest && e.target.closest('[data-tg]'); if(!b) return; if(b.dataset.tg==='bus') S.tgBus=!S.tgBus; else S.tgOth=!S.tgOth; render(); const f=document.querySelector('[data-tg="'+b.dataset.tg+'"]'); if(f) f.focus({preventScroll:true}); });
 function nxt(){ if(S.step===2 && S.sub<2 && staged()){ S.sub=2; S.fresh=true; render(); S.fresh=false; const f=$('next'); if(f && !_key) f.focus({preventScroll:true}); } else go(S.step+1); }
 function prv(){ if(S.step===2 && S.sub>1 && staged()){ S.sub=1; render(); const f=$('next'); if(f && !_key) f.focus({preventScroll:true}); } else go(S.step-1); }
-function go(n){ const from=S.step; S.step = Math.min(STEPS,Math.max(1,n)); S.sub = S.step===2 ? (n>from?1:2) : S.sub; render(); const f = $('next') && !$('next').disabled ? $('next') : $('back'); if(f && !_first && !_key) f.focus({preventScroll:true}); }
+function go(n){ const from=S.step; S.step = Math.min(STEPS,Math.max(1,n)); if(S.step===2 && from!==2){ S.tgBus=false; S.tgOth=false; } S.sub = S.step===2 ? (n>from?1:2) : S.sub; render(); const f = $('next') && !$('next').disabled ? $('next') : $('back'); if(f && !_first && !_key) f.focus({preventScroll:true}); }
 
 document.querySelectorAll('[data-k]').forEach(e=>{ const p=e.dataset.k.split('.'); e.value = p.length===2 ? S[p[0]][p[1]] : S[p[0]];
   e.addEventListener('input',()=>{ const path=e.dataset.k.split('.'), v=e.type==='time'?e.value:+e.value; if(e.type==='number' && !(v>0) && e.dataset.k!=='dwell') return; if(path.length===2) S[path[0]][path[1]]=v; else S[path[0]]=v; render(); }); });
