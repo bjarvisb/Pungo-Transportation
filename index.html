@@ -38,7 +38,7 @@ header h1{text-align:left;font-size:52px;line-height:1.0;letter-spacing:-.01em;c
 @media (max-width:900px){.stage{grid-template-columns:minmax(0,1fr)}}
 .panel{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(2,8,28,.5),inset 0 1px 0 rgba(255,255,255,.07);padding:28px;display:flex;flex-direction:column;gap:18px;min-height:440px}
 .eyebrow{font-size:22px;letter-spacing:0;color:var(--teal-ink);font-weight:700}
-.qs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:16px;counter-reset:q}
+.qs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:28px;counter-reset:q}
 .qs li{counter-increment:q;font-size:24px;line-height:1.25;color:var(--ink);font-weight:700;display:grid;grid-template-columns:38px 1fr;gap:8px}
 .qs li::before{content:counter(q);width:32px;height:32px;border-radius:50%;background:var(--teal);color:#06122E;font-size:16px;display:grid;place-items:center;margin-top:2px}
 .stats{display:flex;flex-direction:column}
@@ -101,6 +101,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .ask b{color:var(--orange-ink)}
 
 .r8note{margin:0;font-size:15.5px;color:var(--muted)}
+.askline{margin-top:7px}
 .askcost{margin-top:8px;font-size:15px;line-height:1.35;color:#DCE3F5}
 .nav{display:flex;align-items:center;gap:18px;margin-top:auto;padding-top:6px}
 .steps{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;min-width:0}
@@ -181,7 +182,7 @@ details.sub{background:rgba(255,255,255,.03)} details.sub>summary{font-size:15px
   .panel{grid-column:1;grid-row:2;align-self:stretch}
   .mapcol{grid-column:2;grid-row:1 / span 2}
   details{grid-column:1 / -1;grid-row:3}
-  .qs{gap:34px;margin-top:8px}
+  .qs{gap:58px;margin-top:14px}
   .qs li{font-size:34px;line-height:1.2;grid-template-columns:56px 1fr;gap:6px}
   .qs li::before{width:44px;height:44px;font-size:22px;margin-top:0}
   .eyebrow{font-size:28px}
@@ -248,6 +249,7 @@ details.sub{background:rgba(255,255,255,.03)} details.sub>summary{font-size:15px
       </div>
       <details class="sub">
         <summary>Assumptions and method</summary>
+        <p class="note">Cost: a Tranquest driver and our van, partly offset by Route 8 savings and new rider fees. Figures pending Tranquest.</p>
         <div class="body">
           <div class="fields">
             <label>Arrive at school<input type="time" id="in-arrive" data-k="arrive"></label>
@@ -423,7 +425,7 @@ function drawMap(){
     g += `<polyline points="${L8}" fill="none" stroke="#FFFFFF" stroke-width="${8.5*u}" stroke-linecap="round" stroke-linejoin="round" opacity=".92"/><polyline points="${L8}" fill="none" stroke="#FF7A2E" stroke-width="${4.6*u}" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${12*u} ${7*u}"/>`;
     R8_STOPS.forEach(s=>{ const [x,y]=proj(s[1],s[2]); g += `<circle cx="${x}" cy="${y}" r="${4*u}" fill="#0A1431" stroke="#FF8A4C" stroke-width="${2*u}"><title>Route 8: ${s[0]} (${s[3]}), position approximate</title></circle>`; });
     const [lx,ly] = proj(36.8450,-75.9780), rr = (st===3&&S.run==='pm')?R8_RIDE_PM:R8_RIDE_AM;
-    g += halo(lx-14*u,ly-4*u,st===3?'Route 8 without Home Depot':`Route 8 today: ${rr} min`,18*k,'#8C3200','text-anchor="end"');
+    if(st===2) g += halo(lx-14*u,ly-4*u,`Route 8 today: ${rr} min`,18*k,'#8C3200','text-anchor="end"');
   }
   if((st===3||st===4) && p){
     const pl = p.plans[0], seq = pl.best.seq;
@@ -433,14 +435,14 @@ function drawMap(){
     }
     pl.best.order.forEach((k,i)=>label[k] = String(i+1));
     const hd = p.flat.find(a=>a.k==='HD');
-    if(hd && st===3){ const ln = leg(seq[0],seq[1]).line, m = ln[Math.floor(ln.length*0.55)], [vx,vy] = proj(m[0],m[1]);
+    if(false){ const ln = leg(seq[0],seq[1]).line, m = ln[Math.floor(ln.length*0.55)], [vx,vy] = proj(m[0],m[1]);
       g += halo(vx+8*u,vy-12*u,`Van: ${Math.round(hd.ride)} min`,19*k,'#0A1431'); }
   }
   // student homes, rounded to about a quarter mile
   D.dots.forEach(d=>{
     const [x,y] = proj(d.lat,d.lon), r = (6+2.6*Math.sqrt(d.n))*u, rd = st===2 && S.tgBus && RID.some(q=>Math.abs(q[0]-d.lat)<0.001 && Math.abs(q[1]-d.lon)<0.001);
-    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="${rd?'#FF7A2E':'#3CC3D3'}" stroke="#0A1431" stroke-width="${2*u}"><title>${d.n} student${d.n>1?'s':''}, location rounded</title></circle>`;
-    if(d.n>1) g += `<text x="${x}" y="${y+4.4*u}" text-anchor="middle" font-size="${12*u}" font-weight="700" fill="#06122E">${d.n}</text>`;
+    g += `<circle cx="${x}" cy="${y}" r="${r}" fill="${rd?'#FF7A2E':'#3CC3D3'}" stroke="#0A1431" stroke-width="${2*u}" opacity="${st===3?0.4:1}"><title>${d.n} student${d.n>1?'s':''}, location rounded</title></circle>`;
+    if(d.n>1) g += `<text x="${x}" y="${y+4.4*u}" text-anchor="middle" font-size="${12*u}" font-weight="700" fill="#06122E" opacity="${st===3?0.4:1}">${d.n}</text>`;
   });
   if(st===2 && S.tgOth) OTH.forEach(d=>{
     const [x,y] = proj(d.lat,d.lon), r = (6+2.6*Math.sqrt(d.n))*u;
@@ -452,11 +454,15 @@ function drawMap(){
     const [x,y] = proj(...PTS[kk]), L = label[kk];
     g += `<circle cx="${x}" cy="${y}" r="${14*u}" fill="${L?'#F36721':'#0A1431'}" stroke="${L?'#fff':'#FF8A4C'}" stroke-width="${2.6*u}"/>`;
     g += `<text x="${x}" y="${y+5*u}" text-anchor="middle" font-size="${13*u}" font-weight="700" fill="${L?'#0A1431':'#FF8A4C'}">${L||'\u2022'}</text>`;
-    g += k<1 ? halo(x-16*u,y-20*u,SHORT[kk],23*k,'#0A1431','text-anchor="end"') : halo(x+16*u,y-20*u,SHORT[kk],23*k,'#0A1431');
+    { const fs=23*k*u, tw=SHORT[kk].length*fs*0.58, ph=fs*1.7, narrow=k<1, tx=narrow?x-26*u:x+40*u, by=y-26*u, pw=tw+28*u, px0=narrow?tx-tw-14*u:tx-14*u;
+      g += `<rect x="${px0}" y="${by-ph*0.66}" width="${pw}" height="${ph}" rx="${ph/2}" fill="#0A1431" fill-opacity=".95" stroke="#F36721" stroke-width="${2.6*u}"/>`;
+      g += `<text x="${tx}" y="${by}" font-size="${fs}" font-weight="700" fill="#fff"${narrow?' text-anchor="end"':''}>${SHORT[kk]}</text>`; }
   });
   const [sx,sy] = proj(...PTS.school);
-  g += `<rect x="${sx-12*u}" y="${sy-12*u}" width="${24*u}" height="${24*u}" rx="${4*u}" fill="#fff" stroke="#3CC3D3" stroke-width="${2.6*u}"/><text x="${sx}" y="${sy+5.5*u}" text-anchor="middle" font-size="${15*u}" font-weight="700" fill="#172E69">N</text>`;
-  g += halo(sx+19*u,sy+8*u,'Norfolk Academy',23*k,'#0A1431');
+  { const fs=23*k*u, tw='Norfolk Academy'.length*fs*0.58, ph=fs*1.7, px0=sx-20*u, tx=sx+20*u;
+    g += `<rect x="${px0}" y="${sy-ph/2}" width="${tx-px0+tw+16*u}" height="${ph}" rx="${ph/2}" fill="#0A1431" fill-opacity=".95" stroke="#3CC3D3" stroke-width="${2.6*u}"/>`;
+    g += `<rect x="${sx-12*u}" y="${sy-12*u}" width="${24*u}" height="${24*u}" rx="${4*u}" fill="#fff" stroke="#3CC3D3" stroke-width="${2.6*u}"/><text x="${sx}" y="${sy+5.5*u}" text-anchor="middle" font-size="${15*u}" font-weight="700" fill="#172E69">N</text>`;
+    g += `<text x="${tx}" y="${sy+fs*0.35}" font-size="${fs}" font-weight="700" fill="#fff">Norfolk Academy</text>`; }
   box.innerHTML = `<svg viewBox="${v.x} ${v.y} ${v.w} ${v.h}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`;
   $('attrib').hidden = !D.basemap;
   const svg = box.firstChild; let drag = null;
@@ -483,7 +489,7 @@ function panelHTML(M, hdA, hdP, wA, wP){
     <div class="arrows"><button class="chev" type="button" id="back" aria-label="Back" ${S.step===1?'disabled':''}>${chev('M15 5l-7 7 7 7')}</button>
     <button class="chev" type="button" id="next" aria-label="Next" ${S.step===STEPS?'disabled':''}>${chev('M9 5l7 7-7 7')}</button></div></div>`;
   if(S.step===1) return `<div class="eyebrow">The questions</div>
-    <ol class="qs"><li>What are additional ways to grow in Pungo?</li><li>How do current families get here?</li><li>Would a direct route make us more appealing?</li></ol>${nav}`;
+    <ol class="qs"><li>What are additional ways to grow in Pungo?</li><li>How do current families get here?</li><li>Would a direct route help remove a barrier for prospective families?</li></ol>${nav}`;
   if(S.step===2) return `<div class="eyebrow">Where we are today</div>
     <div class="grp"><div class="glabel">Our students</div>
       <div class="nums three">
@@ -517,9 +523,7 @@ function panelHTML(M, hdA, hdP, wA, wP){
         <div class="vs"><div><b>${Math.round(hdA.ride)}</b><small>min</small><em>morning, was ${R8_RIDE_AM}</em></div><div><b>${Math.round(hdP.ride)}</b><small>min</small><em>home, was ${R8_RIDE_PM}</em></div></div></div></div>
       <div class="call"><i>3</i><div><strong>A path to Norfolk Academy.</strong><span>A ride a six-year-old can handle.</span></div></div>
     </div>
-    <div class="ask"><b>Explore: one semester</b>
-      <ul class="askl"><li>14-seat van, Home Depot direct</li><li>Morning and afternoon runs; late bus riders stay on Route 8</li><li>Starts with a family survey</li></ul>
-      <div class="askcost">Cost: a Tranquest driver and our van, partly offset by Route 8 savings and new rider fees. Figures pending Tranquest.</div></div>${nav}`;
+    <div class="ask"><b>Explore: one semester</b><div class="askline">14-seat van from Home Depot, morning and afternoon runs; late bus riders stay on Route 8.</div></div>${nav}`;
 }
 
 function render(){
