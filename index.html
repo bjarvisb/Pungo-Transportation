@@ -49,6 +49,15 @@ header h1{text-align:left;font-size:52px;line-height:1.0;letter-spacing:-.01em;c
 .stat span{font-size:16px}
 .stat.hot b{color:var(--orange-ink)}
 .grp{display:flex;flex-direction:column;gap:8px}
+.s4g{gap:14px;padding-top:28px;border-top:1px solid var(--line)}
+.s4g.first{border-top:0;padding-top:4px}
+.s4t{margin:0;font-size:22px;line-height:1.38;color:var(--ink);text-wrap:balance}
+.topics.s4l{margin:0;gap:18px}
+.topics.s4l li{font-size:20px;line-height:1.32;text-wrap:balance}
+.sig4{display:flex;align-items:baseline;gap:18px}
+.sig4 b{font-size:56px;line-height:1;color:var(--teal-ink);font-weight:800;white-space:nowrap}
+.sig4 span{font-size:20px;line-height:1.3;color:var(--ink);flex:1;min-width:0}
+
 .glabel{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .nums{display:grid;gap:12px}
 .nums.three{grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
@@ -200,6 +209,12 @@ details.sub{background:rgba(255,255,255,.03)} details.sub>summary{font-size:15px
   .ask{font-size:22px;padding:22px 24px}
   .askcost{font-size:17.5px;margin-top:12px}
   .topics li{font-size:19px}
+  .s4g{padding-top:30px}
+  .s4t{font-size:24px;line-height:1.34}
+  .topics.s4l li{font-size:22px;line-height:1.28}
+  .topics.s4l{gap:18px}
+  .sig4 b{font-size:60px}
+  .sig4 span{font-size:22px}
   .sig b{font-size:54px}
   .sig span{font-size:19px}
   .ask.worth{font-size:21px;padding:16px 20px}
@@ -496,7 +511,7 @@ function panelHTML(M, hdA, hdP, wA, wP){
         <div class="num"><b>${M.tot}</b><span>enrolled from 23456</span></div>
         <div class="num"><b>${D.hh.length}</b><span>families</span></div>
         <div class="num low"><b>3</b><span>ride the bus</span></div>
-      </div><p class="subnote">7 more students ride Route 8 from Home Depot and live in other zip codes, 4 of them in 23454.</p></div>
+      </div><p class="subnote">5 more students from 3 nearby families ride Route 8 from Home Depot, 4 of them in 23454.</p></div>
     <div class="more ${staged()&&S.sub<2?'hold':''} ${S.fresh?'fresh':''}">
     <div class="grp"><div class="glabel">Getting to school</div>
       <div class="nums two">
@@ -506,15 +521,12 @@ function panelHTML(M, hdA, hdP, wA, wP){
     <div><h3>What we think gets in the way</h3>
     <ul class="gets"><li><b>Distance.</b> Pungo families drive about ${eastDrive} minutes to school.</li><li><b>The bus.</b> Route 8 is more than an hour each way, a lot to ask of a younger student.</li><li><b>Awareness.</b> We have lower visibility in this area of Virginia Beach.</li></ul></div></div>${nav}`;
   if(S.step===4) return `<div class="eyebrow">The survey</div>
-    <div class="grp"><div class="glabel">Who we ask</div>
-      <div class="nums two">
-        <div class="num"><b>${D.hh.length}</b><span>families in 23456</span></div>
-        <div class="num"><b>7</b><span>riders from other zips</span></div>
-      </div><p class="subnote">Plus a few nearby families who do not ride yet.</p></div>
-    <div class="grp"><div class="glabel">What we ask</div>
-      <ul class="topics"><li>How your child gets to school today</li><li>Would a direct route make the bus option preferable, at today's fees</li><li>Who else nearby might consider us</li></ul></div>
-    <div class="grp"><div class="glabel">The signal to move forward</div>
-      <div class="sig"><b>3 to 5</b><span>additional riders who do not ride today</span></div></div>
+    <div class="grp s4g first"><div class="glabel">Who we ask</div>
+      <p class="s4t">All ${D.hh.length} families in 23456, plus families who ride Route&nbsp;8 from nearby zip codes.</p></div>
+    <div class="grp s4g"><div class="glabel">What we ask</div>
+      <ul class="topics s4l"><li>How your child gets to school today</li><li>Would a direct route from Home Depot work for your family, at today's fees</li><li>Neighbors who might be interested in Norfolk Academy</li></ul></div>
+    <div class="grp s4g"><div class="glabel">The signal to move forward</div>
+      <div class="sig4"><b>3 to 5</b><span>additional riders who do not ride today</span></div></div>
     ${nav}`;
   return `<div class="eyebrow">The proposal</div>
     <div>
